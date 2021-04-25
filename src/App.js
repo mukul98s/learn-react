@@ -1,16 +1,20 @@
 import "./index.css";
-import Review from "./review";
+import Question from "./Question";
+import data from "./data";
 
 function App() {
   return (
     <main>
-      <section className="container">
-        <div className="title">
-          <h2>Our Reviews</h2>
-          <div className="underline"></div>
+      <div className="section">
+        <div className="container">
+          <h3>questions and answers about login</h3>
+          <section className="info">
+            {data.map((d) => {
+              return <Question key={d.id} {...d} />;
+            })}
+          </section>
         </div>
-        <Review />
-      </section>
+      </div>
     </main>
   );
 }
