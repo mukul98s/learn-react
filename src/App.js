@@ -1,39 +1,47 @@
 import React, { useState } from "react";
-import data from "./data";
+import SingleColor from "./SingleColor";
+
+import Values from "values.js";
 
 function App() {
-  const [number, setNumber] = useState(0);
-  const [text, setText] = useState([]);
+  const [color, setColor] = useState("");
+  const [error, setError] = useState(false);
+  const [list, setList] = useState(new Values("#e5e5e5").all(10));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let amount = parseInt(number);
-    if (number <= 0) amount = 1;
-    if (number > 8) amount = 8;
 
-    setText(data.slice(0, amount));
+    try {
+      let colors = new Values(color).all(10);
+      setList(colors);
+    } catch (error) {
+      console.log(error);
+      setError(true);
+    }
   };
   return (
-    <div className="section-center">
-      <h3>tired of boring lorem ipsum</h3>
-      <form className="form" onSubmit={handleSubmit}>
-        <label htmlFor="number">Paragraph</label>
-        <input
-          type="number"
-          value={number}
-          onChange={(e) => setNumber(e.target.value)}
-        />
-        <button type="submit" className="btn">
-          generate
-        </button>
-      </form>
-
-      <main>
-        {text.map((p) => {
-          return <p>{p}</p>;
+    <React.Fragment>
+      <section className="container">
+        <h3>Generate Color</h3>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            placeholder="#f5f5f5"
+            className={`${error ? "error" : ""}`}
+          />
+          <button className="btn" type="submit">
+            Submit
+          </button>
+        </form>
+      </section>
+      <section className="colors">
+        {list.map((color, index) => {
+          return <SingleColor key={index} {...color} index={index} />;
         })}
-      </main>
-    </div>
+      </section>
+    </React.Fragment>
   );
 }
 
